@@ -8,64 +8,55 @@ public abstract class ActorController : MonoBehaviour
     protected NavMeshAgent agent;
 
     [SerializeField]
-    protected Color baseColor = Color.blue;
+    private Bullet bulletGO;
 
-    protected Color taggedColor = Color.red;
+    [SerializeField]
+    private float healthPoints = 100F;
 
-    protected MeshRenderer renderer;
+    [SerializeField]
+    private float spawnOffset = 1.5F;
 
-    public delegate void OnActorTagged(bool val);
+    public delegate void OnDamageTaken(float damagePts);
 
-    public OnActorTagged onActorTagged;
+    public OnDamageTaken onDamageTaken;
 
-    public bool IsTagged { get; protected set; }
+    public float CurrentHP { get; protected set; }
 
     // Use this for initialization
     protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        renderer = GetComponent<MeshRenderer>();
+        CurrentHP = healthPoints;
 
-        SetTagged(false);
+        onDamageTaken += ApplyDamage;
+    }
 
-        onActorTagged += SetTagged;
+    private void ApplyDamage(float damagePts)
+    {
+        CurrentHP -= damagePts;
+
+        if (CurrentHP <= 0F)
+        {
+        }
     }
 
     protected abstract Vector3 GetTargetLocation();
+
+    protected void Shoot()
+    {
+        if (bulletGO != null)
+        {
+            Instantiate<Bullet>(bulletGO, transform.position + new Vector3(0F, 0F, spawnOffset), transform.rotation);
+        }
+    }
 
     protected void MoveActor()
     {
         agent.SetDestination(GetTargetLocation());
     }
 
-    protected void OnCollisionEnter(Collision collision)
-    {
-        ActorController otherActor = collision.gameObject.GetComponent<ActorController>();
-
-        if (otherActor != null)
-        {
-            print("collided!");
-
-            otherActor.onActorTagged(true);
-            onActorTagged(false);
-        }
-    }
-
     protected virtual void OnDestroy()
     {
         agent = null;
-        renderer = null;
-        onActorTagged -= SetTagged;
-    }
-
-    private void SetTagged(bool val)
-    {
-        IsTagged = val;
-
-        if (renderer)
-        {
-            print(string.Format("Changing color to {0}", gameObject.name));
-            renderer.material.color = val ? taggedColor : baseColor;
-        }
     }
 }

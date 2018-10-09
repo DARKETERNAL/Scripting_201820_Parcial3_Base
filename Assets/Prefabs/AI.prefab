@@ -113,8 +113,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48dfb3748c2e3b44391b590f5a214df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseColor: {r: 0, g: 0, b: 1, a: 1}
+  bulletGO: {fileID: 114656094135043094, guid: 19f015489a7248c40b20b3e49f7f308f, type: 2}
+  healthPoints: 100
+  spawnOffset: 1.5
   moveRadius: 50
+  btRootNode: {fileID: 0}
 --- !u!136 &136296967928905404
 CapsuleCollider:
   m_ObjectHideFlags: 1

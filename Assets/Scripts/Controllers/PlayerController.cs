@@ -31,6 +31,11 @@ public class PlayerController : ActorController
             MoveActor();
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            Shoot();
+        }
+
         //print(string.Format("{0},{1},{2}", Input.mousePosition.x, Input.mousePosition.y, Input.mousePosition.z));
     }
 }
